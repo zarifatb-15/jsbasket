@@ -22,9 +22,9 @@ for (let i = 0; i < buttons.length; i++) {
     else {
       let product = {
         id,
-        name: this.parentNode.firstElementChild.inerText,
+        name: this.parentNode.firstElementChild.innerText,
         desc: this.previousElementSibling.innerText,
-        price: str.substring(str.indexOf(" ") + 1, str.indexOf("$")),
+        price: +str.substring(str.indexOf(" ") + 1, str.indexOf("$")),
         url: this.parentNode.previousElementSibling.getAttribute("src"),
         count: 1
       };
@@ -32,5 +32,27 @@ for (let i = 0; i < buttons.length; i++) {
     }
 
     localStorage.setItem("basket", JSON.stringify(products));
-});
+    let basketCount=document.querySelector("#basketCount");
+      let totalCount=0;
+        for(let i=0;i<products.length;i++){
+          const element=products[i];
+          totalCount+=element.count;
+        }
+        basketCount.innerText=totalCount;
+    });
+
 }
+function BasketCount(){
+    let basketStr = localStorage.getItem("basket");
+    if(basketStr){
+        let products=JSON.parse(basketStr);
+        let basketCount=document.querySelector("#basketCount");
+        let totalCount=0;
+        for(let i=0;i<products.length;i++){
+          const element=products[i];
+          totalCount+=element.count;
+        }
+        basketCount.innerText=totalCount;
+    }
+}
+BasketCount();
