@@ -13,46 +13,68 @@ for (let i = 0; i < buttons.length; i++) {
     let products = [];
     if (basketStr) {
       products = JSON.parse(basketStr);
-    } 
-    
-    let existproduct=products.find(p=>p.id==id);
-    if(existproduct){
-      existproduct.count++;
     }
-    else {
+
+    let existproduct = products.find((p) => p.id == id);
+    if (existproduct) {
+      existproduct.count++;
+    } else {
       let product = {
         id,
         name: this.parentNode.firstElementChild.innerText,
         desc: this.previousElementSibling.innerText,
         price: +str.substring(str.indexOf(" ") + 1, str.indexOf("$")),
         url: this.parentNode.previousElementSibling.getAttribute("src"),
-        count: 1
+        count: 1,
       };
       products.push(product);
     }
 
     localStorage.setItem("basket", JSON.stringify(products));
-    let basketCount=document.querySelector("#basketCount");
-      let totalCount=0;
-        for(let i=0;i<products.length;i++){
-          const element=products[i];
-          totalCount+=element.count;
-        }
-        basketCount.innerText=totalCount;
-    });
-
-}
-function BasketCount(){
-    let basketStr = localStorage.getItem("basket");
-    if(basketStr){
-        let products=JSON.parse(basketStr);
-        let basketCount=document.querySelector("#basketCount");
-        let totalCount=0;
-        for(let i=0;i<products.length;i++){
-          const element=products[i];
-          totalCount+=element.count;
-        }
-        basketCount.innerText=totalCount;
+    let basketCount = document.querySelector("#basketCount");
+    let totalCount = 0;
+    for (let i = 0; i < products.length; i++) {
+      const element = products[i];
+      totalCount += element.count;
     }
+    basketCount.innerText = totalCount;
+  });
+}
+function BasketCount() {
+  let basketStr = localStorage.getItem("basket");
+  if (basketStr) {
+    let products = JSON.parse(basketStr);
+    let basketCount = document.querySelector("#basketCount");
+    let totalCount = 0;
+    for (let i = 0; i < products.length; i++) {
+      const element = products[i];
+      totalCount += element.count;
+    }
+    basketCount.innerText = totalCount;
+  }
 }
 BasketCount();
+
+function ShowBasketItem() {
+  let basketStr = localStorage.getItem("basket");
+  if (basketStr) {
+    let products = JSON.parse(basketStr);
+    products.forEach((p) => {
+      let tr = `
+      <tr>
+      <td>
+        <img src="${p.url}" alt="">
+      </td>
+      <td>${p.name}</td>
+      <td>${p.desc}</td>
+      <td>${p.price}</td>
+      <td>${p.count}</td>
+      <td>X</td>
+    </tr>
+      `
+    let table = document.querySelector(".table");
+    table.lastElementChild.innerHTML +=tr;
+    });
+  }
+}
+ShowBasketItem();
